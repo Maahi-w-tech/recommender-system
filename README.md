@@ -1,95 +1,194 @@
-# Movie Recommender — End-to-End ML Project
+# 🎬 Movie Recommender System
 
-A weekend-scoped, full pipeline recommender system: data → model → experiment
-tracking → Streamlit app → Docker.
+An end-to-end Machine Learning project that recommends movies using both **Content-Based Filtering** and **Collaborative Filtering** techniques.
 
-## 1. Get the data
+The project demonstrates the complete ML workflow—from data preprocessing and model training to experiment tracking, deployment with Streamlit.
 
-Download the **MovieLens Latest Small** dataset (100k ratings, ~9k movies,
-no signup needed):
+---
+
+##  Features
+
+- Content-Based Recommendation using **TF-IDF** and **Cosine Similarity**
+- Collaborative Filtering using **Truncated SVD**
+- Interactive Streamlit web application
+- MLflow experiment tracking
+- Modular project structure
+
+---
+
+##  Dataset
+
+This project uses the **MovieLens Latest Small** dataset.
+
+Download it here:
 
 https://grouplens.org/datasets/movielens/latest/
 
-Unzip it and place `movies.csv` and `ratings.csv` into the `data/` folder:
+After downloading, extract the files and place them inside the `data` directory.
 
 ```
 recommender-project/
-  data/
-    movies.csv
-    ratings.csv
+│
+├── data/
+│   ├── movies.csv
+│   └── ratings.csv
 ```
 
-## 2. Install dependencies
+---
+
+##  Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/recommender-system.git
+cd recommender-system
+```
+
+Create a virtual environment
+
+### Windows
 
 ```bash
 python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+Install the required packages
+
+```bash
 pip install -r requirements.txt
 ```
 
-## 3. Train the models
+---
 
-Two approaches are included — pick one to start, both are wired up:
+##  Train the Models
 
-**Content-based** (TF-IDF on genres + cosine similarity — fast, simple, no
-cold-start problem for new users):
+### Content-Based Filtering
+
+Uses TF-IDF vectorization on movie genres followed by cosine similarity.
 
 ```bash
 python src/train_content.py
 ```
 
-**Collaborative filtering** (matrix factorization via TruncatedSVD on the
-user-item ratings matrix — captures taste patterns, needs existing user
-history):
+### Collaborative Filtering
+
+Uses Truncated Singular Value Decomposition (SVD) on the user-item ratings matrix.
 
 ```bash
 python src/train_cf.py
 ```
 
-Both scripts save their artifacts into `models/` and log params + metrics to
-**MLflow**. View the experiment dashboard with:
+Both models automatically save their trained artifacts inside the `models/` folder.
+
+---
+
+##  MLflow Experiment Tracking
+
+Launch the MLflow dashboard
 
 ```bash
 mlflow ui
 ```
-then open http://localhost:5000
 
-## 4. Run the app
+Open
+
+```
+http://localhost:5000
+```
+
+to view parameters, metrics, and experiment runs.
+
+---
+
+##  Run the Application
+
+Start the Streamlit app
 
 ```bash
 streamlit run app.py
 ```
 
-Opens at http://localhost:8501 — pick a movie or user ID, get recommendations.
+The application will be available at
 
-## 5. Docker (optional deploy step)
-
-```bash
-docker build -t movie-recommender .
-docker run -p 8501:8501 movie-recommender
+```
+http://localhost:8501
 ```
 
-## Project structure
+Users can choose a movie or provide a user ID to receive personalized recommendations.
+
+---
+
+
+
+## 📁 Project Structure
 
 ```
 recommender-project/
-  data/                  # put movies.csv, ratings.csv here
-  models/                # trained artifacts land here (gitignored)
-  src/
-    data_loader.py        # loading + light cleaning
-    train_content.py      # TF-IDF + cosine similarity model
-    train_cf.py            # SVD collaborative filtering model
-    recommend.py           # shared inference functions used by app.py
-  app.py                  # Streamlit UI
-  requirements.txt
-  Dockerfile
-  README.md
+│
+├── data/
+│   ├── movies.csv
+│   └── ratings.csv
+│
+├── models/
+│
+├── src/
+│   ├── data_loader.py
+│   ├── train_content.py
+│   ├── train_cf.py
+│   └── recommend.py
+│
+├── app.py
+├── requirements.txt
+└── README.md
 ```
 
-## Suggested next steps (stretch goals)
+---
 
-- Hybrid: blend content + CF scores
-- Evaluate with precision@k / recall@k instead of just RMSE
-- Swap TruncatedSVD for `implicit` (ALS) if you move to implicit feedback data
-- Deploy to Streamlit Community Cloud or Render for a live shareable link
-- Add a `/predict` FastAPI endpoint alongside the Streamlit app for an API-style deployment
+##  Machine Learning Pipeline
+
+1. Load MovieLens dataset
+2. Preprocess movies and ratings
+3. Train Content-Based recommender
+4. Train Collaborative Filtering recommender
+5. Save trained models
+6. Log experiments with MLflow
+7. Serve recommendations using Streamlit
+
+---
+
+##  Tech Stack
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- MLflow
+- Streamlit
+  
+
+---
+
+##  Future Improvements
+
+- Hybrid recommendation system
+- Precision@K and Recall@K evaluation
+- Implicit feedback recommendation (ALS)
+- FastAPI REST API
+- Cloud deployment (Render / Streamlit Community Cloud)
+- User authentication
+- Movie posters using TMDB API
+
+---
+
+##  License
+
+This project uses the MovieLens dataset provided by GroupLens Research.
